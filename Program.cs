@@ -1,15 +1,48 @@
+using MVC01_BY_MennaTarek.Middleware;
+
 namespace MVC01_BY_MennaTarek
 {
     public class Program
     {
+        // Entry Point
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
             // Add services to the container.
+
+
+            // Used To Add Built-in MVC Services Inside The Containers
+
+            // DI Container
             builder.Services.AddControllersWithViews();
 
+            // Used To Add Built-in Web Apis Servies Inside The Containers
+            //builder.Services.AddControllers();
+
+
+            // Used To Add Built-in Razor Pages Servies Inside The Containers
+            //builder.Services.AddRazorPages();
+
+
+
+
             var app = builder.Build();
+
+            // Add Middlewares
+
+
+            // Custom Middlewares
+
+            //app.Use(async (context, next) =>
+            //{
+            //    Console.WriteLine("Hello"); 
+            //    await next.Invoke(context);
+            //    Console.WriteLine("Bye Bye");
+            //});
+
+            app.UseMiddleware<RequestTimeMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -20,14 +53,21 @@ namespace MVC01_BY_MennaTarek
             }
 
             app.UseHttpsRedirection();
+
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.MapStaticAssets();
+
+
+            //app.MapControllerRoute(
+            //    name: "Default2",
+            //    pattern:"shop/{controller}/{action}"
+            //    );
+
+            // Convention Routing
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{controller=Home}/{action=Index}/{id:int:range(10,20)?}")
                 .WithStaticAssets();
 
             app.Run();
